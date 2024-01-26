@@ -10,11 +10,6 @@ class Venue extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'city',
@@ -22,11 +17,6 @@ class Venue extends Model
         'postal_code',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'id' => 'integer',
     ];
