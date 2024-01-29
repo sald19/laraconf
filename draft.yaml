@@ -6,6 +6,7 @@ models:
     end_date: datetime
     status: string
     region: string
+    is_published: boolean
     venue_id: unsignedInteger nullable
     relationships:
       belongsTo: Venue

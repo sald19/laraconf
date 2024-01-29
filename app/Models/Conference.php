@@ -8,6 +8,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -68,6 +69,8 @@ class Conference extends Model
             DateTimePicker::make('end_date')
                 ->native(false)
                 ->required(),
+            Toggle::make('is_published')
+                ->default(true),
             Select::make('status')
                 ->options([
                     'draft' => 'Draft',
