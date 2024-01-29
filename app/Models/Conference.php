@@ -81,7 +81,7 @@ class Conference extends Model
                         ->native(false)
                         ->required(),
                     Fieldset::make('Status')
-                            ->columns(1)
+                        ->columns(1)
                         ->schema([
                             Select::make('status')
                                 ->options([
