@@ -2,16 +2,21 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TalkLength;
+use App\Enums\TalkStatus;
 use App\Filament\Resources\TalkResource\Pages;
 use App\Filament\Resources\TalkResource\RelationManagers;
 use App\Models\Talk;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class TalkResource extends Resource
 {
@@ -39,31 +44,108 @@ class TalkResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->persistFiltersInSession()
+            ->filtersTriggerAction(function ($action) {
+                return $action->button()->label('Filters');
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()
+                    ->description(function (Talk $record) {
+                        return Str::limit($record->abstract, 40);
+                    }),
+                Tables\Columns\ImageColumn::make('speaker.avatar')
+                    ->label('Speaker Avatar')
+                    ->circular()
+                    ->defaultImageUrl(function (Talk $record) {
+                        return 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name='. urldecode($record->speaker->name);
+                    }),
                 Tables\Columns\TextColumn::make('speaker.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->searchable(),
+                Tables\Columns\ToggleColumn::make('new_talk'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->color(function (TalkStatus $state) {
+                        return $state->getColor();
+                    }),
+                Tables\Columns\IconColumn::make('length')
+                    ->icon(function ( $state) {
+                        return match ($state) {
+                            TalkLength::NORMAL => 'heroicon-o-megaphone',
+                            TalkLength::LIGHTNING => 'heroicon-o-bolt',
+                            TalkLength::KEYNOTE => 'heroicon-o-key',
+                        };
+                    }),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('new_talk'),
+                Tables\Filters\SelectFilter::make('speaker')
+                    ->relationship('speaker', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
+                Tables\Filters\Filter::make('has_avatar')
+                    ->label('Show Only Speakers With Avatars')
+                    ->toggle()
+                    ->query(function ($query) {
+                       return $query->whereHas('speaker', function ($query) {
+                           return $query->whereNotNull('avatar');
+                       });
+                    }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->slideOver(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('approve')
+                        ->visible(function ($record) {
+                            return $record->status === TalkStatus::SUBMITTED;
+                        })
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->action(function (Talk $record) {
+                            $record->approve();
+                        })->after(function () {
+                            Notification::make()->success()->title('This Talk was approved')
+                                ->duration(1000)
+                                ->body('The Speaker has been notified and the talk has been added to the conference schedule.')
+                                ->Send();
+                        }),
+                    Tables\Actions\Action::make('rejected')
+                        ->icon('heroicon-o-no-symbol')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(function ($record) {
+                            return $record->status === TalkStatus::SUBMITTED;
+                        })
+                        ->action(function (Talk $record) {
+                            $record->reject();
+                        })->after(function () {
+                            Notification::make()->danger()->title('This Talk was rejected')
+                                ->duration(1000)
+                                ->body('The Speaker has been notified.')
+                                ->Send();
+                        }),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('approve')
+                        ->action(function (Collection $records) {
+                            $records->each->approve();
+                        }),
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('export')
+                    ->tooltip('This willa export all records visble in the table. Adjust filters to export a subset of records.')
+                    ->action(function ($livewire) {
+                        logger('furulla furullera');
+                    })
             ]);
     }
 
