@@ -43,7 +43,6 @@ class ConferenceSignUpPage extends Component implements HasForms, HasActions
                 ->schema(Attendee::getForm()),
             ])
             ->action(function (array $data) {
-                logger($data);
                 collect($data['attendees'])->each(function ($data) {
                     Attendee::create([
                         'conference_id' => $this->conferenceId,
