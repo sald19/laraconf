@@ -26,20 +26,20 @@ class Conference extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'description',
-        'start_date',
         'end_date',
-        'status',
+        'name',
         'region',
+        'start_date',
+        'status',
         'venue_id',
     ];
 
     protected $casts = [
-        'id' => 'integer',
-        'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'id' => 'integer',
         'region' => Region::class,
+        'start_date' => 'datetime',
         'venue_id' => 'integer',
     ];
 
