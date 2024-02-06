@@ -20,6 +20,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -62,6 +63,9 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                EnvironmentIndicatorPlugin::make(),
             ]);
     }
 
