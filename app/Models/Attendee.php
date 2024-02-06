@@ -18,6 +18,7 @@ class Attendee extends Model
         'is_paid',
         'name',
         'ticket_cost',
+        'created_at',
     ];
 
     public function conference(): BelongsTo
