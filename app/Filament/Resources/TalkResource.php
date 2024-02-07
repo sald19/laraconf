@@ -5,16 +5,12 @@ namespace App\Filament\Resources;
 use App\Enums\TalkLength;
 use App\Enums\TalkStatus;
 use App\Filament\Resources\TalkResource\Pages;
-use App\Filament\Resources\TalkResource\RelationManagers;
 use App\Models\Talk;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -22,7 +18,7 @@ class TalkResource extends Resource
 {
     protected static ?string $model = Talk::class;
 
-//    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    //    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Second Group';
 
@@ -48,7 +44,7 @@ class TalkResource extends Resource
                     ->label('Speaker Avatar')
                     ->circular()
                     ->defaultImageUrl(function (Talk $record) {
-                        return 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name='. urldecode($record->speaker->name);
+                        return 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name='.urldecode($record->speaker->name);
                     }),
                 Tables\Columns\TextColumn::make('speaker.name')
                     ->sortable()
@@ -61,7 +57,7 @@ class TalkResource extends Resource
                         return $state->getColor();
                     }),
                 Tables\Columns\IconColumn::make('length')
-                    ->icon(function ( $state) {
+                    ->icon(function ($state) {
                         return match ($state) {
                             TalkLength::NORMAL => 'heroicon-o-megaphone',
                             TalkLength::LIGHTNING => 'heroicon-o-bolt',
@@ -80,9 +76,9 @@ class TalkResource extends Resource
                     ->label('Show Only Speakers With Avatars')
                     ->toggle()
                     ->query(function ($query) {
-                       return $query->whereHas('speaker', function ($query) {
-                           return $query->whereNotNull('avatar');
-                       });
+                        return $query->whereHas('speaker', function ($query) {
+                            return $query->whereNotNull('avatar');
+                        });
                     }),
             ])
             ->actions([
@@ -135,7 +131,7 @@ class TalkResource extends Resource
                     ->tooltip('This willa export all records visble in the table. Adjust filters to export a subset of records.')
                     ->action(function ($livewire) {
                         logger('furulla furullera');
-                    })
+                    }),
             ]);
     }
 

@@ -3,10 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\Region;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Conference;
-use App\Models\Venue;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ConferenceFactory extends Factory
 {
@@ -24,6 +22,7 @@ class ConferenceFactory extends Factory
     {
         $startDate = now()->addMonths(9);
         $endDate = now()->addMonths(9)->addDays(2);
+
         return [
             'name' => $this->faker->name,
             'description' => $this->faker->text,

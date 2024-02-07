@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\Region;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\MarkdownEditor;
@@ -125,7 +124,7 @@ class Conference extends Model
                     ->label('Fill with Factory Data')
                     ->icon('heroicon-m-star')
                     ->visible(function (string $operation) {
-                        return !($operation !== 'create' || !app()->environment('local'));
+                        return ! ($operation !== 'create' || ! app()->environment('local'));
                     })
                     ->action(function ($livewire) {
                         $data = Conference::factory()->make()->toArray();

@@ -6,7 +6,6 @@ use App\Enums\TalkStatus;
 use App\Filament\Resources\SpeakerResource\Pages;
 use App\Filament\Resources\SpeakerResource\RelationManagers;
 use App\Models\Speaker;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\ImageEntry;
@@ -16,16 +15,15 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SpeakerResource extends Resource
 {
     protected static ?string $model = Speaker::class;
 
-//    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    //    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Second Group';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -81,7 +79,7 @@ class SpeakerResource extends Resource
                             TextEntry::make('twitter_handle')
                                 ->label('Twitter')
                                 ->getStateUsing(function (Speaker $record) {
-                                    return '@'. $record->twitter_handle;
+                                    return '@'.$record->twitter_handle;
                                 })
                                 ->url(function (Speaker $record) {
                                     return 'https://twitter.com/'.$record->twitter_handle;

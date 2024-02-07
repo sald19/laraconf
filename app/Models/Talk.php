@@ -6,7 +6,6 @@ use App\Enums\TalkLength;
 use App\Enums\TalkStatus;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -65,7 +64,7 @@ class Talk extends Model
                 ->maxLength(65535)
                 ->columnSpanFull(),
             Select::make('speaker_id')
-                ->hidden(function () use($speakerId) {
+                ->hidden(function () use ($speakerId) {
                     return $speakerId !== null;
                 })
                 ->relationship('speaker', 'name')

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\AttendeeResource\Widgets;
 
 use App\Filament\Resources\AttendeeResource\Pages\ListAttendees;
-use App\Models\Attendee;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Flowframe\Trend\Trend;
@@ -15,7 +14,7 @@ class AttendeeChartWidget extends ChartWidget
 
     protected static ?string $heading = 'Attendee Signups';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected static ?string $pollingInterval = null;
 

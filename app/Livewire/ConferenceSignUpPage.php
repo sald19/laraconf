@@ -8,7 +8,6 @@ use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
@@ -16,12 +15,13 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
 
-class ConferenceSignUpPage extends Component implements HasForms, HasActions
+class ConferenceSignUpPage extends Component implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
 
     public int $conferenceId;
+
     public int $price = 50000;
 
     public function mount()
@@ -37,10 +37,10 @@ class ConferenceSignUpPage extends Component implements HasForms, HasActions
                 Placeholder::make('total_price')
                     ->hiddenLabel()
                     ->content(function (Get $get) {
-                        return '$'. count($get('attendees')) * 500;
+                        return '$'.count($get('attendees')) * 500;
                     }),
                 Repeater::make('attendees')
-                ->schema(Attendee::getForm()),
+                    ->schema(Attendee::getForm()),
             ])
             ->action(function (array $data) {
                 collect($data['attendees'])->each(function ($data) {
