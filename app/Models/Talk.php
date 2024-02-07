@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\TalkLength;
@@ -12,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Talk extends Model
+final class Talk extends Model
 {
     use HasFactory;
 
@@ -30,6 +32,23 @@ class Talk extends Model
         'speaker_id' => 'integer',
         'status' => TalkStatus::class,
     ];
+
+    public static function getForm($speakerId = null): array
+    {
+        return [
+            TextInput::make('title')
+                ->required()
+                ->maxLength(255),
+            RichEditor::make('abstract')
+                ->required()
+                ->maxLength(65535)
+                ->columnSpanFull(),
+            Select::make('speaker_id')
+                ->hidden(fn() => null !== $speakerId)
+                ->relationship('speaker', 'name')
+                ->required(),
+        ];
+    }
 
     public function speaker(): BelongsTo
     {
@@ -51,24 +70,5 @@ class Talk extends Model
     {
         $this->status = TalkStatus::REJECTED;
         $this->save();
-    }
-
-    public static function getForm($speakerId = null): array
-    {
-        return [
-            TextInput::make('title')
-                ->required()
-                ->maxLength(255),
-            RichEditor::make('abstract')
-                ->required()
-                ->maxLength(65535)
-                ->columnSpanFull(),
-            Select::make('speaker_id')
-                ->hidden(function () use ($speakerId) {
-                    return $speakerId !== null;
-                })
-                ->relationship('speaker', 'name')
-                ->required(),
-        ];
     }
 }

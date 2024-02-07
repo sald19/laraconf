@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VenueResource\Pages;
@@ -9,7 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class VenueResource extends Resource
+final class VenueResource extends Resource
 {
     protected static ?string $model = Venue::class;
 
@@ -42,7 +44,7 @@ class VenueResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -57,7 +59,7 @@ class VenueResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\AttendeeResource\Widgets;
 
 use App\Filament\Resources\AttendeeResource\Pages\ListAttendees;
@@ -8,9 +10,11 @@ use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
-class AttendeeChartWidget extends ChartWidget
+final class AttendeeChartWidget extends ChartWidget
 {
     use InteractsWithPageTable;
+
+    public ?string $filter = '3months';
 
     protected static ?string $heading = 'Attendee Signups';
 
@@ -19,8 +23,6 @@ class AttendeeChartWidget extends ChartWidget
     protected static ?string $pollingInterval = null;
 
     protected static ?string $maxHeight = '200px';
-
-    public ?string $filter = '3months';
 
     protected function getFilters(): ?array
     {
@@ -67,10 +69,10 @@ class AttendeeChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Signups',
-                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                    'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
                 ],
             ],
-            'labels' => $data->map(fn (TrendValue $value) => $value->date),
+            'labels' => $data->map(fn(TrendValue $value) => $value->date),
         ];
     }
 

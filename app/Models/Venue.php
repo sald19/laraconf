@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\Region;
@@ -12,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Venue extends Model implements HasMedia
+final class Venue extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
@@ -29,11 +31,6 @@ class Venue extends Model implements HasMedia
         'id' => 'integer',
         'region' => Region::class,
     ];
-
-    public function conferences(): HasMany
-    {
-        return $this->hasMany(Conference::class);
-    }
 
     public static function getForm(): array
     {
@@ -58,5 +55,10 @@ class Venue extends Model implements HasMedia
                 ->multiple()
                 ->image(),
         ];
+    }
+
+    public function conferences(): HasMany
+    {
+        return $this->hasMany(Conference::class);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\SpeakerResource\RelationManagers;
 
 use App\Models\Talk;
@@ -8,7 +10,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class TalksRelationManager extends RelationManager
+final class TalksRelationManager extends RelationManager
 {
     protected static string $relationship = 'talks';
 
@@ -32,7 +34,7 @@ class TalksRelationManager extends RelationManager
                     ->badge(),
             ])
             ->filters([
-                //
+
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),

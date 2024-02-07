@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\Region;
@@ -20,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Conference extends Model
+final class Conference extends Model
 {
     use HasFactory;
 
@@ -41,26 +43,6 @@ class Conference extends Model
         'start_date' => 'datetime',
         'venue_id' => 'integer',
     ];
-
-    public function venue(): BelongsTo
-    {
-        return $this->belongsTo(Venue::class);
-    }
-
-    public function speakers(): BelongsToMany
-    {
-        return $this->belongsToMany(Speaker::class);
-    }
-
-    public function talks(): BelongsToMany
-    {
-        return $this->belongsToMany(Talk::class);
-    }
-
-    public function attendees(): HasMany
-    {
-        return $this->hasMany(Attendee::class);
-    }
 
     public static function getForm(): array
     {
@@ -114,23 +96,39 @@ class Conference extends Model
                         ->preload()
                         ->createOptionForm(Venue::getForm())
                         ->editOptionForm(Venue::getForm())
-                        ->relationship('venue', 'name', modifyQueryUsing: function (Builder $query, Get $get) {
-                            return $query->where('region', $get('region'));
-                        }),
+                        ->relationship('venue', 'name', modifyQueryUsing: fn(Builder $query, Get $get) => $query->where('region', $get('region'))),
                 ]),
 
             Actions::make([
                 Action::make('star')
                     ->label('Fill with Factory Data')
                     ->icon('heroicon-m-star')
-                    ->visible(function (string $operation) {
-                        return ! ($operation !== 'create' || ! app()->environment('local'));
-                    })
-                    ->action(function ($livewire) {
+                    ->visible(fn(string $operation) => ! ('create' !== $operation || ! app()->environment('local')))
+                    ->action(function ($livewire): void {
                         $data = Conference::factory()->make()->toArray();
                         $livewire->form->fill($data);
                     }),
             ]),
         ];
+    }
+
+    public function venue(): BelongsTo
+    {
+        return $this->belongsTo(Venue::class);
+    }
+
+    public function speakers(): BelongsToMany
+    {
+        return $this->belongsToMany(Speaker::class);
+    }
+
+    public function talks(): BelongsToMany
+    {
+        return $this->belongsToMany(Talk::class);
+    }
+
+    public function attendees(): HasMany
+    {
+        return $this->hasMany(Attendee::class);
     }
 }

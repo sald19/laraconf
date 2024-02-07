@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Speakers\Resources;
 
 use App\Filament\Speakers\Resources\AttendeeResource\Pages;
@@ -9,7 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class AttendeeResource extends Resource
+final class AttendeeResource extends Resource
 {
     protected static ?string $model = Attendee::class;
 
@@ -19,7 +21,7 @@ class AttendeeResource extends Resource
     {
         return $form
             ->schema([
-                //
+
             ]);
     }
 
@@ -27,10 +29,10 @@ class AttendeeResource extends Resource
     {
         return $table
             ->columns([
-                //
+
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -45,7 +47,7 @@ class AttendeeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+
         ];
     }
 

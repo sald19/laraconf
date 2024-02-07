@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\AttendeeResource;
@@ -11,7 +13,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Widgets\Widget;
 
-class TestChart extends Widget implements HasActions, HasForms
+final class TestChart extends Widget implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
@@ -26,7 +28,7 @@ class TestChart extends Widget implements HasActions, HasForms
             ->button()
             ->color('warning')
             ->label('Send a Notification')
-            ->action(function () {
+            ->action(function (): void {
                 Notification::make()->warning()->title('You send a notification')
                     ->body('This is a test')
                     ->persistent()
@@ -38,7 +40,7 @@ class TestChart extends Widget implements HasActions, HasForms
                         \Filament\Notifications\Actions\Action::make('Undo')
                             ->link()
                             ->color('gray')
-                            ->action(function () {
+                            ->action(function (): void {
                                 logger('hi');
                             }),
                     ])

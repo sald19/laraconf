@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Enums\Region;
 use App\Models\Conference;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ConferenceFactory extends Factory
+final class ConferenceFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Enums\TalkStatus;
@@ -16,7 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class SpeakerResource extends Resource
+final class SpeakerResource extends Resource
 {
     protected static ?string $model = Speaker::class;
 
@@ -50,7 +52,7 @@ class SpeakerResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -78,12 +80,8 @@ class SpeakerResource extends Resource
                             TextEntry::make('email'),
                             TextEntry::make('twitter_handle')
                                 ->label('Twitter')
-                                ->getStateUsing(function (Speaker $record) {
-                                    return '@'.$record->twitter_handle;
-                                })
-                                ->url(function (Speaker $record) {
-                                    return 'https://twitter.com/'.$record->twitter_handle;
-                                }),
+                                ->getStateUsing(fn(Speaker $record) => '@' . $record->twitter_handle)
+                                ->url(fn(Speaker $record) => 'https://twitter.com/' . $record->twitter_handle),
                             TextEntry::make('has_spoken')
                                 ->getStateUsing(function ($record) {
                                     return $record->talks()->where('status', TalkStatus::APPROVED)->count() > 0
@@ -91,9 +89,7 @@ class SpeakerResource extends Resource
                                         : 'Has Not Spoken';
                                 })
                                 ->badge()
-                                ->color(function ($state) {
-                                    return $state === 'Previous Speaker' ? 'success' : 'primary';
-                                }),
+                                ->color(fn($state) => 'Previous Speaker' === $state ? 'success' : 'primary'),
                         ]),
 
                 ]),

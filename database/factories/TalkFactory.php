@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Speaker;
 use App\Models\Talk;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TalkFactory extends Factory
+final class TalkFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.

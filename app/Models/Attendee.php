@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Filament\Forms\Components\Group;
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Attendee extends Model
+final class Attendee extends Model
 {
     use HasFactory;
 
@@ -20,11 +22,6 @@ class Attendee extends Model
         'ticket_cost',
         'created_at',
     ];
-
-    public function conference(): BelongsTo
-    {
-        return $this->belongsTo(Conference::class);
-    }
 
     public static function getForm(): array
     {
@@ -39,5 +36,10 @@ class Attendee extends Model
                     ->maxLength(255),
             ]),
         ];
+    }
+
+    public function conference(): BelongsTo
+    {
+        return $this->belongsTo(Conference::class);
     }
 }

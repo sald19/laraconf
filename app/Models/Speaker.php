@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Filament\Forms\Components\CheckboxList;
@@ -11,11 +13,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Speaker extends Model
+final class Speaker extends Model
 {
     use HasFactory;
 
-    const QUALIFICATIONS = [
+    public const QUALIFICATIONS = [
         'business-leader' => 'Business Leader',
         'charisma' => 'Charismatic Speaker',
         'first-time' => 'First Time Speaker',
@@ -41,11 +43,6 @@ class Speaker extends Model
         'id' => 'integer',
         'qualifications' => 'array',
     ];
-
-    public function talks(): HasMany
-    {
-        return $this->hasMany(Talk::class);
-    }
 
     public static function getForm()
     {
@@ -79,6 +76,11 @@ class Speaker extends Model
                 ->columns(3),
 
         ];
+    }
+
+    public function talks(): HasMany
+    {
+        return $this->hasMany(Talk::class);
     }
 
     public function conferences(): BelongsToMany

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AttendeeResource\Pages;
@@ -14,17 +16,19 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class AttendeeResource extends Resource
+final class AttendeeResource extends Resource
 {
     protected static ?string $model = Attendee::class;
 
     protected static ?string $navigationGroup = 'First Group';
 
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function getNavigationBadge(): ?string
     {
-        return Attendee::count();
+        return (string) Attendee::count();
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -87,7 +91,7 @@ class AttendeeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -102,7 +106,7 @@ class AttendeeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+
         ];
     }
 

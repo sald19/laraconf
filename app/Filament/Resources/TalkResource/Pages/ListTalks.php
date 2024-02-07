@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\TalkResource\Pages;
 
 use App\Enums\TalkStatus;
@@ -8,7 +10,7 @@ use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 
-class ListTalks extends ListRecords
+final class ListTalks extends ListRecords
 {
     protected static string $resource = TalkResource::class;
 
@@ -17,17 +19,11 @@ class ListTalks extends ListRecords
         return [
             'all' => Tab::make('all Talks'),
             'approved' => Tab::make('Approved')
-                ->modifyQueryUsing(function ($query) {
-                    return $query->where('status', TalkStatus::APPROVED);
-                }),
+                ->modifyQueryUsing(fn($query) => $query->where('status', TalkStatus::APPROVED)),
             'submitted' => Tab::make('Submitted')
-                ->modifyQueryUsing(function ($query) {
-                    return $query->where('status', TalkStatus::SUBMITTED);
-                }),
+                ->modifyQueryUsing(fn($query) => $query->where('status', TalkStatus::SUBMITTED)),
             'rejected' => Tab::make('Rejected')
-                ->modifyQueryUsing(function ($query) {
-                    return $query->where('status', TalkStatus::REJECTED);
-                }),
+                ->modifyQueryUsing(fn($query) => $query->where('status', TalkStatus::REJECTED)),
         ];
     }
 

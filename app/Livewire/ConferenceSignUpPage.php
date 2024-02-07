@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire;
 
 use App\Models\Attendee;
@@ -15,7 +17,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
 
-class ConferenceSignUpPage extends Component implements HasActions, HasForms
+final class ConferenceSignUpPage extends Component implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
@@ -24,7 +26,7 @@ class ConferenceSignUpPage extends Component implements HasActions, HasForms
 
     public int $price = 50000;
 
-    public function mount()
+    public function mount(): void
     {
         $this->conferenceId = 1;
     }
@@ -36,14 +38,12 @@ class ConferenceSignUpPage extends Component implements HasActions, HasForms
             ->form([
                 Placeholder::make('total_price')
                     ->hiddenLabel()
-                    ->content(function (Get $get) {
-                        return '$'.count($get('attendees')) * 500;
-                    }),
+                    ->content(fn(Get $get) => '$' . count($get('attendees')) * 500),
                 Repeater::make('attendees')
                     ->schema(Attendee::getForm()),
             ])
-            ->action(function (array $data) {
-                collect($data['attendees'])->each(function ($data) {
+            ->action(function (array $data): void {
+                collect($data['attendees'])->each(function ($data): void {
                     Attendee::create([
                         'conference_id' => $this->conferenceId,
                         'ticket_cost' => $this->price,
@@ -52,7 +52,7 @@ class ConferenceSignUpPage extends Component implements HasActions, HasForms
                         'is_paid' => true,
                     ]);
                 });
-            })->after(function () {
+            })->after(function (): void {
                 Notification::make()->success()->title('Success!')
                     ->body(new HtmlString('You have successfully signed up for the conference.'))->send();
             });

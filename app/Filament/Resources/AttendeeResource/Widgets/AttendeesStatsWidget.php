@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\AttendeeResource\Widgets;
 
 use App\Filament\Resources\AttendeeResource\Pages\ListAttendees;
@@ -7,7 +9,7 @@ use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class AttendeesStatsWidget extends BaseWidget
+final class AttendeesStatsWidget extends BaseWidget
 {
     use InteractsWithPageTable;
 
